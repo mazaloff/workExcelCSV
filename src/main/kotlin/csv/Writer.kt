@@ -5,7 +5,7 @@ import org.apache.commons.csv.CSVPrinter
 import java.io.File
 
 object Writer {
-    fun writeFromMap(filePath: String, map: MutableMap<Long, MutableMap<String, String>>) {
+    fun writeFromMap(filePath: String, map: MutableMap<Long, MutableMap<String, Any>>) {
 
         val writer = File(filePath).bufferedWriter()
         val fmt = CSVFormat.EXCEL.withDelimiter(';')

@@ -19,7 +19,7 @@ object Reader {
         }
     }
 
-    fun readToMap(filePath: String): MutableMap<Long, MutableMap<String, String>> {
+    fun readToMap(filePath: String): MutableMap<Long, MutableMap<String, Any>> {
 
         val fmt = CSVFormat.EXCEL.withDelimiter(';')
             .withFirstRecordAsHeader()
@@ -28,16 +28,16 @@ object Reader {
             .withTrim()
 
         val csvParser = CSVParser(File(filePath).bufferedReader(), fmt)
-        val result: MutableMap<Long, MutableMap<String, String>> = mutableMapOf()
+        val result: MutableMap<Long, MutableMap<String, Any>> = mutableMapOf()
 
         for (csvRecord in csvParser) {
-            val row = mutableMapOf(
-                "code" to csvRecord.getOrEmpty("code", "<?>"),
-                "product" to csvRecord.getOrEmpty("product", "<?>"),
-                "quantity" to csvRecord.getOrEmpty("quantity", "0"),
-                "cost" to csvRecord.getOrEmpty("cost", "0.00")
+            val rowMap = mutableMapOf(
+                "code" to csvRecord.getStringOrEmpty("code", "<?>"),
+                "product" to csvRecord.getStringOrEmpty("product", "<?>"),
+                "quantity" to csvRecord.getNumberOrEmpty("quantity", 0) { it.toInt() },
+                "cost" to csvRecord.getNumberOrEmpty("cost", 0.00) { it.toDouble() }
             )
-            result[csvRecord.recordNumber] = row
+            result[csvRecord.recordNumber] = rowMap
         }
         return result
     }
