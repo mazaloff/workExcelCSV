@@ -20,15 +20,16 @@ object Reader {
     }
 
     fun readToMap(filePath: String): MutableMap<Long, MutableMap<String, String>> {
+
         val fmt = CSVFormat.EXCEL.withDelimiter(';')
-        val csvParser = CSVParser(
-            File(filePath).bufferedReader(), fmt
-                .withHeader("code", "product", "quantity", "cost")
-                .withFirstRecordAsHeader()
-                .withIgnoreHeaderCase()
-                .withTrim()
-        )
+            .withFirstRecordAsHeader()
+            .withHeader("code", "product", "quantity", "cost")
+            .withIgnoreHeaderCase()
+            .withTrim()
+
+        val csvParser = CSVParser(File(filePath).bufferedReader(), fmt)
         val result: MutableMap<Long, MutableMap<String, String>> = mutableMapOf()
+
         for (csvRecord in csvParser) {
             val row = mutableMapOf(
                 "code" to csvRecord.getOrEmpty("code", "<?>"),

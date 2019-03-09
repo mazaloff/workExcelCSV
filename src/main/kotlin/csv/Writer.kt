@@ -6,12 +6,15 @@ import java.io.File
 
 object Writer {
     fun writeFromMap(filePath: String, map: MutableMap<Long, MutableMap<String, String>>) {
+
         val writer = File(filePath).bufferedWriter()
         val fmt = CSVFormat.EXCEL.withDelimiter(';')
-        val csvPrinter = CSVPrinter(
-            writer, fmt
-                .withHeader("code", "product", "quantity", "cost")
-        )
+            .withHeader("code", "product", "quantity", "cost")
+            .withIgnoreHeaderCase()
+            .withTrim()
+
+        val csvPrinter = CSVPrinter(writer, fmt)
+
         for (entity in map) {
             csvPrinter.printRecord(
                 entity.value["code"]?.valueOrEmpty("<?>"),
